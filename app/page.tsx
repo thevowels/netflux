@@ -3,7 +3,7 @@ export default function Home() {
   return (
     <>
         <h1>
-            Netflix clone
+            Netflix clone updated
         </h1>
     </>
   );
