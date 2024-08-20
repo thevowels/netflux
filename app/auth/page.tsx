@@ -2,6 +2,7 @@
 
 import Input from "@/app/comopnents/Input";
 import {useCallback, useState} from "react";
+import axios from "axios";
 
 const Auth = () =>{
 
@@ -9,11 +10,23 @@ const Auth = () =>{
     const [name,setName] = useState("");
     const [password,setPassword] = useState("");
 
-    const [variant, setVariant] = useState("Login");
+    const [variant, setVariant] = useState("login");
 
     const toggleVariant = useCallback(()=>{
         setVariant((currentVariant) => currentVariant == "login" ? "register":"login")
     },[])
+
+    const register = useCallback(async() =>{
+        try{
+            await axios.post('/api/register',{
+                email,
+                name,
+                password
+            })
+        }catch(error){
+            console.log(error);
+        }
+    },[email,name,password])
 
     return(
         <div
@@ -43,7 +56,8 @@ const Auth = () =>{
                                 id={"name"}
                                 type={"name"}
                                 value={name}
-                            />}
+                            />
+                            }
 
                             <Input
                                 label={"Email"}
@@ -72,6 +86,7 @@ const Auth = () =>{
                                     hover:bg-red-700
                                     transition
                                 "
+                                onClick={register}
                             >
                                 {variant == "login" ? "Login": "Sign Up"}
                             </button>
