@@ -4,14 +4,14 @@ import prismadb from "@/lib/prismadb";
 
 import {compare} from "bcrypt";
 
-export default NextAuth({
+const handler = NextAuth({
     providers:[
         Credentials({
             id:'credentials',
-            name:'credentials',
+            name:'Credentials',
             credentials:[{
                 email:{
-                    'label': 'Email',
+                    label: 'email',
                     type: 'email',
                 },
                 password:{
@@ -20,7 +20,10 @@ export default NextAuth({
                 }
             }],
             async authorize(credentials){
+                console.log('authroize function called')
+                console.log(credentials)
                 if(!credentials?.email || !credentials.password){
+                    console.log('Missing email')
                     throw new Error("Email and password required");
                 }
                 const user = await prismadb.user.findUnique({
@@ -52,7 +55,10 @@ export default NextAuth({
         strategy:'jwt',
     },
     jwt:{
-        secret: process.env.NEXT_AUTH_SECRET,
+        secret: process.env.NEXTAUTH_JWT_SECRET,
     },
-    secret: process.env.NEXT_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
 })
+
+
+export { handler as GET, handler as POST };
